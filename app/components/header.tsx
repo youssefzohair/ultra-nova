@@ -86,6 +86,14 @@ export function Header({ locale, path }: { locale: Locale; path: string }) {
                   {item.label}
                 </Link>
               ))}
+              {/* Language switch in mobile menu */}
+              <Link
+                href={alternateLocalePath(locale, path)}
+                onClick={() => setIsMenuOpen(false)}
+                className="mt-2 rounded-lg border border-white/20 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white hover:text-slate-950 active:scale-95"
+              >
+                {text.nav.switchLanguage}
+              </Link>
             </div>
           </nav>
         )}
