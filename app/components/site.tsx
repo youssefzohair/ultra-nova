@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useState } from "react";
 import { company } from "../../data/company";
 import { alternateLocalePath, copy, Locale, localizedPath } from "../../data/i18n";
 
@@ -21,6 +22,8 @@ export function SiteShell({
 }
 
 export function Header({ locale, path }: { locale: Locale; path: string }) {
+  "use client";
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const text = copy[locale];
   const navItems = [
     { href: localizedPath(locale, "/"), label: text.nav.home },
@@ -47,7 +50,23 @@ export function Header({ locale, path }: { locale: Locale; path: string }) {
           </div>
         </Link>
 
-        <nav className="order-3 flex w-full items-center gap-2 overflow-x-auto text-sm font-semibold text-slate-300 md:order-none md:w-auto">
+        {/* Mobile menu button */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="md:hidden rounded-sm border border-white/10 p-2 text-white hover:border-sky-400 hover:bg-sky-700"
+          aria-label="Toggle menu"
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
+        {/* Desktop navigation */}
+        <nav className="hidden md:flex items-center gap-2 text-sm font-semibold text-slate-300">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -58,6 +77,24 @@ export function Header({ locale, path }: { locale: Locale; path: string }) {
             </Link>
           ))}
         </nav>
+
+        {/* Mobile navigation */}
+        {isMenuOpen && (
+          <nav className="absolute left-0 right-0 top-full z-40 border-b border-white/10 bg-[#0f1b2d]/95 backdrop-blur-xl md:hidden">
+            <div className="flex flex-col gap-2 px-5 py-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="rounded-sm border border-white/10 px-4 py-2 text-sm font-semibold text-slate-300 transition hover:border-sky-400 hover:bg-sky-700 hover:text-white"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        )}
 
         <div className="flex items-center gap-3">
           <Link
