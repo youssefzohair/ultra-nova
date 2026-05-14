@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { sendContactEmail } from "../../app/actions/send-email";
+import { sendContactEmail } from "../actions/send-email";
 
 type ContactFormFields = {
   name: string;
